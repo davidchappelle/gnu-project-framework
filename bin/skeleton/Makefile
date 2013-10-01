@@ -2,9 +2,9 @@ TOP_DIRECTORY=../..
  
 CXX_LDFLAGS+= \
 	-lstdc++ \
-	-lserver \
+	-lskeleton \
 
-EXECUTABLE=server
+EXECUTABLE=skeleton
 
 SOURCES=$(EXECUTABLE).cpp
 

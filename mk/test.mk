@@ -6,23 +6,18 @@ ifeq ($(TEST_SOURCES),)
   $(error <test.mk> TEST_SOURCES must be defined)
 endif
 
-ifeq ($(TEST_EXECUTABLES),)
-  $(error <test.mk> TEST_EXECUTABLES must be defined)
-endif
+-include $(TOP_DIRECTORY)/mk/tools.mk
+-include $(TOP_DIRECTORY)/mk/configuration.mk
+-include $(TOP_DIRECTORY)/mk/build.mk
 
-SOURCES=$(TEST_SOURCES)
-EXECUTABLES=$(TEST_EXECUTABLES)
+all:
 
--include $(TOP_DIRECTORY)/mk/executable.mk
+test: build-directories $(BUILD_OUTPUT_DIRECTORY)/runner 
+	$(BUILD_OUTPUT_DIRECTORY)/runner
 
-define run_tests
-  +@tests='$(TEST_EXECUTABLES)'; \
-  for test in $$tests; do \
-    echo "Running test => $$test"; \
-    $(BUILD_OUTPUT_DIRECTORY)/$$test; \
-  done;
-endef
+$(BUILD_OUTPUT_DIRECTORY)/runner: $(BUILD_OUTPUT_DIRECTORY)/runner.cpp
+	$(CXX) $(CXX_FLAGS) -o $@ $< $(CXX_LDFLAGS)
 
-test: all
-	$(run_tests)
+$(BUILD_OUTPUT_DIRECTORY)/runner.cpp: $(TEST_SOURCES)
+	$(CXXTESTGEN) -o $@ --error-printer $^
 

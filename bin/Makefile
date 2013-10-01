@@ -1,5 +1,5 @@
 TOP_DIRECTORY=..
-SUB_DIRECTORIES=client server
+SUB_DIRECTORIES=skeleton
 
 -include $(TOP_DIRECTORY)/mk/subdirectory.mk
 

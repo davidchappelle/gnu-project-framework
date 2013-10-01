@@ -24,7 +24,7 @@ endif
 OBJECTS=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/,$(addsuffix .o,$(basename $(SOURCES))))
 DEPENDENCIES=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/,$(addsuffix .d,$(basename $(SOURCES))))
 EXECUTABLE_TARGETS=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/, $(EXECUTABLES))
-BUILD_CLEANUP_FILES=$(OBJECTS) $(DEPENDENCIES) $(EXECUTABLE_TARGETS)
+BUILD_OUTPUT_FILES=$(OBJECTS) $(DEPENDENCIES) $(EXECUTABLE_TARGETS)
 
 define compile_executable_target
   @cmd="$(CXX) $(CXX_FLAGS) $@.o -o $@ $(CXX_LDFLAGS)" ; \

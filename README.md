@@ -1,4 +1,4 @@
-+ gnu-project-framework
+============================== gnu-project-framework ==============================
 
 This is a project skeleton that can be used to quickly get up and running with
 a gnu based c/c++ project without having to fight through all of the initial gnu
@@ -6,7 +6,7 @@ make overhead. The sample included in the project framework includes simple skel
 of both a c and c++ library, unit testing for these libraries, and the corresponding
 c and c++ executables that use these libraries.
 
-+ Unit Testing
+================================== unit testing ===================================
 
 cxxtest is integrated with this project. To install cxxtest in your development
 environment you ihave two options:

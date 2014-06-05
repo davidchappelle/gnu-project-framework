@@ -16,7 +16,7 @@ test: build-directories $(BUILD_OUTPUT_DIRECTORY)/runner
 	$(BUILD_OUTPUT_DIRECTORY)/runner
 
 $(BUILD_OUTPUT_DIRECTORY)/runner: $(BUILD_OUTPUT_DIRECTORY)/runner.cpp
-	$(CXX) $(CXX_FLAGS) -o $@ $< $(CXX_LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(CXXLDFLAGS)
 
 $(BUILD_OUTPUT_DIRECTORY)/runner.cpp: $(TEST_SOURCES)
 	$(CXXTESTGEN) -o $@ --error-printer $^

@@ -1,12 +1,11 @@
 TOP_DIRECTORY=../..
  
-CXX_LDFLAGS+= \
+CXXLDFLAGS+= \
 	-lstdc++ \
-	-lskeleton \
+	-lskeleton_cpp \
 
 EXECUTABLE=skeleton
 
 SOURCES=$(EXECUTABLE).cpp
 
 -include $(TOP_DIRECTORY)/mk/executable.mk
-

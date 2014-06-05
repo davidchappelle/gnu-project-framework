@@ -1,9 +1,7 @@
 TOP_DIRECTORY=../../..
 
-CXX_LDFLAGS+= \
-	-lskeleton \
+CXXLDFLAGS+=-lskeleton_cpp \
 
-TEST_SOURCES= t-Skeleton.hxx
+TEST_SOURCES=skeleton.test
 
 -include $(TOP_DIRECTORY)/mk/test.mk
-

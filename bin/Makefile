@@ -1,5 +1,4 @@
 TOP_DIRECTORY=..
-SUB_DIRECTORIES=skeleton
+SUB_DIRECTORIES=c cpp
 
 -include $(TOP_DIRECTORY)/mk/subdirectory.mk
-

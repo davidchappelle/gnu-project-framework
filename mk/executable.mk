@@ -1,19 +1,8 @@
 ifeq ($(TOP_DIRECTORY),)
   $(error <executable.mk> TOP_DIRECTORY must be defined)
 endif
-
-ifneq ($(EXECUTABLE),)
-  ifneq ($(EXECUTABLES),)
-    $(error <executable.mk> Only one of EXECUTABLE or EXECUTABLES can be defined)
-  endif
-endif
-ifeq ($(EXECUTABLES),)
-ifneq ($(EXECUTABLE),)
-  EXECUTABLES=$(EXECUTABLE)
-endif
-endif
-ifeq ($(EXECUTABLES),)
-  $(error <executable.mk> EXECUTABLE or EXECUTABLES must be defined)
+ifeq ($(EXECUTABLE),)
+  $(error <executable.mk> EXECUTABLE must be defined)
 endif
 ifeq ($(SOURCES),)
   $(error <executable.mk> SOURCES must be defined)
@@ -23,11 +12,11 @@ endif
 
 OBJECTS=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/,$(addsuffix .o,$(basename $(SOURCES))))
 DEPENDENCIES=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/,$(addsuffix .d,$(basename $(SOURCES))))
-EXECUTABLE_TARGETS=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/, $(EXECUTABLES))
+EXECUTABLE_TARGET=$(addprefix $(BUILD_OUTPUT_DIRECTORY)/, $(EXECUTABLE))
 BUILD_OUTPUT_FILES=$(OBJECTS) $(DEPENDENCIES) $(EXECUTABLE_TARGETS)
 
-define compile_executable_target
-  @cmd="$(CXX) $(CXX_FLAGS) $@.o -o $@ $(CXX_LDFLAGS)" ; \
+define compile_c_executable_target
+  @cmd="$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)" ; \
   if test ! "$(BUILD_VERBOSE)" -eq 1; then \
     echo "Compiling $@"; \
   else \
@@ -36,13 +25,27 @@ define compile_executable_target
   $$cmd
 endef
 
-all: build-directories $(OBJECTS) $(EXECUTABLE_TARGETS)
+define compile_cpp_executable_target
+  @cmd="$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(CXXLDFLAGS)" ; \
+  if test ! "$(BUILD_VERBOSE)" -eq 1; then \
+    echo "Compiling $@"; \
+  else \
+    echo "$$cmd"; \
+  fi; \
+  $$cmd
+endef
 
-$(EXECUTABLE_TARGETS): $(OBJECTS)
-	@$(compile_executable_target)
+all: build-directories $(OBJECTS) $(EXECUTABLE_TARGET)
+
+ifneq ($(wildcard $(addsuffix .c, $(EXECUTABLE))),)
+$(EXECUTABLE_TARGET): $(OBJECTS)
+	@$(compile_c_executable_target)
+else
+$(EXECUTABLE_TARGET): $(OBJECTS)
+	@$(compile_cpp_executable_target)
+endif
 
 -include $(TOP_DIRECTORY)/mk/target.mk
 -include $(TOP_DIRECTORY)/mk/build.mk
 -include $(TOP_DIRECTORY)/mk/dependency.mk
 -include $(DEPENDENCIES)
-

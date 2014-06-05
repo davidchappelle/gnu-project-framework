@@ -4,6 +4,8 @@
 namespace skeleton
 {
 
+void hello_world();
+
 } // namespace skeleton
 
-#endif
+#endif // SKELETON_HPP

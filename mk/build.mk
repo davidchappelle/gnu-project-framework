@@ -21,7 +21,7 @@ BUILD_VERBOSE?=1
 -include $(TOP_DIRECTORY)/mk/flags.mk
 -include $(TOP_DIRECTORY)/mk/tools.mk
 
-.SUFFIXES: .o .cpp
+.SUFFIXES: .o .c .cpp
 
 define create_build_directories
   +@directories='$(BUILD_DIRECTORIES)'; \
@@ -37,21 +37,31 @@ endef
 
 define cleanup_build_output
   if [ -d $(BUILD_OUTPUT_DIRECTORY) ]; then \
+    if test $(CLEANUP_BUILD_OUTPUT_FILES) -eq 1; then \
+        if test $(BUILD_VERBOSE) -eq 1; then \
+            echo "Removing build output files: $(BUILD_OUTPUT_FILES)"; \
+        fi; \
+        $(RM) -f $(BUILD_OUTPUT_FILES); \
+    fi; \
     if test $(BUILD_VERBOSE) -eq 1; then \
       echo "Removing build output directory: $(BUILD_OUTPUT_DIRECTORY)"; \
     fi; \
     $(RM) -fr $(BUILD_OUTPUT_DIRECTORY); \
-  fi; \
-  if test $(CLEANUP_BUILD_OUTPUT_FILES) -eq 1; then \
-    if test $(BUILD_VERBOSE) -eq 1; then \
-      echo "Removing build output files: $(BUILD_OUTPUT_FILES)"; \
-    fi; \
-    $(RM) -f $(BUILD_OUTPUT_FILES); \
   fi;
 endef
 
-define compile_cxx_file
-  @cmd="$(CXX) $(CXX_FLAGS) -MMD -MP -c $< -o $@" ; \
+define compile_c_file
+  @cmd="$(CC) $(CFLAGS) -MMD -MP -c $< -o $@" ; \
+  if test $(BUILD_VERBOSE) -eq 1; then \
+    echo "Compiling $<"; \
+  else \
+    echo "$$cmd"; \
+  fi; \
+  $$cmd
+endef
+
+define compile_cpp_file
+  @cmd="$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@" ; \
   if test $(BUILD_VERBOSE) -eq 1; then \
     echo "Compiling $<"; \
   else \
@@ -65,9 +75,11 @@ build-directories:
 
 clean:
 	@$(cleanup_build_output)
-	
 
+$(BUILD_OUTPUT_DIRECTORY)/%.o: %.c
+	@$(compile_c_file)
+	
 $(BUILD_OUTPUT_DIRECTORY)/%.o: %.cpp
-	@$(compile_cxx_file)
+	@$(compile_cpp_file)
 
 .PHONY: clean

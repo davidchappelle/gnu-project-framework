@@ -8,18 +8,22 @@ INCLUDE_DIRECTORIES+= \
 LIBRARY_DIRECTORIES+= \
 	-L$(BUILD_LIBRARY_DIRECTORY)
 
-CXX_WARNINGS= \
-	-Wall \
-	-W \
-	-Wredundant-decls \
-	-Wpointer-arith \
-	-Wno-unused \
-        -Wformat-security \
-        -Wmissing-format-attribute \
-        -Winline \
-	-Werror \
+CFLAGS+=-g -O0 $(INCLUDE_DIRECTORIES)
 
-CXX_FLAGS+=-g -O0 $(CXX_WARNINGS) $(INCLUDE_DIRECTORIES)
+LDFLAGS+=$(LIBRARY_DIRECTORIES)
 
-CXX_LDFLAGS+=$(LIBRARY_DIRECTORIES)
+CXXWARNINGS= \
+    -Wall \
+    -W \
+    -Wredundant-decls \
+    -Wpointer-arith \
+    -Wno-unused \
+    -Wformat-security \
+    -Wmissing-format-attribute \
+    -Winline \
+    -Werror \
+
+CXXFLAGS+=-g -O0 $(CXXWARNINGS) $(INCLUDE_DIRECTORIES)
+
+CXXLDFLAGS+=$(LIBRARY_DIRECTORIES)
 
